@@ -11,7 +11,7 @@ addpath(([fileparts(pwd) '\Allee']))
 addpath(([fileparts(pwd) '\Interaction']))
 
 
-are_we_local = 1;
+are_we_local = 0;
 EXPERIMENT_NR = 1;
 
 if are_we_local == 1

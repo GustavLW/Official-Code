@@ -4,7 +4,7 @@ close all
 
 TopFolder  = fileparts(fileparts(pwd));
 SimFolder  = [TopFolder '\Simulation'];
-DataFolder = [cd '\Allee Data\Strong'];
+DataFolder = [cd '\Allee Data\Set 2\Strong'];
 RealFolder = [fileparts(pwd) '\Microscopy Data'];
 %dir(SimFolder)
 addpath(([SimFolder, filesep]))
@@ -15,11 +15,12 @@ df   = df(3:end);
 %%
 o0   = 0;
 o1   = 0;
-save = 1;
+save_picture = 1;
 MCMC = 0;
 resolution = 201;
 Z    = zeros(resolution);
 priorize = 1;
+ML_lambda = zeros(length(df),3);
 for d = 1:length(df)
     clc
     close all
@@ -89,7 +90,7 @@ for d = 1:length(df)
         hold on
         plot([log(facit(2)) log(facit(2))],[0 40],'k--')
         %xlim([-20 0])
-        if save == 1
+        if save_picture == 1
             figname = ['MCMC_' num2str(d)];
             saveas(h,figname,'png');
         end
@@ -118,6 +119,8 @@ for d = 1:length(df)
         ML = [l0linspace(best_loc_index(1)) l1linspace(best_loc_index(2))];
         LAMBDA = likelihood_handler(rho,dbeta,D,dt,2,[facit(1) facit(2)]);
         MAMBDA = likelihood_handler(rho,dbeta,D,dt,2,exp(ML));
+        ML_lambda(d,1:2) = ML;
+        ML_lambda(d,3)   = MAMBDA;
         log_it = 1;
         subplot(3,2,1:4)
         hold off
@@ -153,7 +156,7 @@ for d = 1:length(df)
         set(gca,'yticklabel',[])
         grid on
         
-        if save == 1
+        if save_picture == 1
            
             figname  = strcat('strong_likelihood_with_prior_',num2str(d));
 
@@ -161,6 +164,7 @@ for d = 1:length(df)
         end
     end
 end
+save('maximum_locations','ML_lambda');
 %%
 
 Zmod = Z/sqrt(abs(max(max(Z))));

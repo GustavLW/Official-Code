@@ -4,7 +4,7 @@ clear all
 close all
 %rng(921111)
 dset = 1;
-n1m  = [1 4];   % governs initial cell number
+n1m  = [0 3];   % governs initial cell number
 n2m  = [1 4];   % governs initial density
 n3m  = [2 3];   % governs strength of allee effect (1 = no proliferation)
 n4m  = [1 1];   % governs bimodality

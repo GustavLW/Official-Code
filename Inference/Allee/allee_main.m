@@ -4,7 +4,7 @@ close all
 
 TopFolder  = fileparts(fileparts(pwd));
 SimFolder  = [TopFolder '\Simulation'];
-DataFolder = [cd '\Allee Data\Set 3\Weak'];
+DataFolder = [cd '\Allee Data\Set 3\Strong'];
 RealFolder = [fileparts(pwd) '\Microscopy Data'];
 %dir(SimFolder)
 addpath(([SimFolder, filesep]))
@@ -128,6 +128,12 @@ for d = 1:length(df)
         Zmod = sqrt(Zmod - min(min(Zmod)));
         Zmod = exp(3*Zmod);
         surf(L0,L1,Zmod,'EdgeColor','none')
+
+        %alternative max?
+        [m1,i1] = max(Z);
+        [m2,i2] = max(m1);
+
+
         hold on
         scatter3(log(facit(1)),log(facit(2)),max(max(Zmod))+1,'red','filled')
         scatter3(ML(1),ML(2),max(max(Zmod))+1,'blue','filled')

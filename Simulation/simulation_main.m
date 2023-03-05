@@ -19,7 +19,7 @@ for n1 = n1m(1):n1m(2)
                     h     = 24;                     % total number of hours the simulation will be run
                     Kobs  = h*3600/freq;            % number of of observations
                     K     = round(h*3600);          % total number of discrete time steps [seconds]
-                    scale = 50;                     % one length unit is one average cell radius. domain is scale X scale
+                    scale = 100;                     % one length unit is one average cell radius. domain is scale X scale
                     N     = 32*2^n1;                % size of initial population
                     Vmin  = 0.00021;                % depth of potential
                     alpha = 3.50000;                % steepness of potential
@@ -28,9 +28,9 @@ for n1 = n1m(1):n1m(2)
                     if n4 == 2
                         sigma(4:4:end) = s_bas*exp(-2);
                     end
-                    l0 = [0.000 0.020 0.250]/3600;        % base division rate
-                    l1 = [0.000 0.200 2.500]/3600;        % allee parameter
-                    om = [0.000 0.003 0.600]/3600;        % base death rate
+                    l0 = [0.000 0.030 0.030]/3600;        % base division rate
+                    l1 = [0.000 0.090 0.180]/3600;        % allee parameter
+                    om = [0.000 0.006 0.036]/3600;        % base death rate
                     lambda0 = l0(n3);
                     lambda1 = l1(n3);
                     omega   = om(n3);
@@ -40,7 +40,7 @@ for n1 = n1m(1):n1m(2)
                     Omega = scale*[0 0;1 0; 1 1; 0 1]';
                     for i = 1:N
                         theta_tmp = 2*pi*rand;
-                        population{i}     = create_cell(0,[],[],scale/2+(2^n2)*rand*[cos(theta_tmp); sin(theta_tmp)],0,0);
+                        population{i}     = create_cell(0,[],[],scale/2+(2^((11-n2)/2))*rand*[cos(theta_tmp); sin(theta_tmp)],0,0);
                         observed_cells{i} = create_cell(0,[],[],zeros(2,Kobs),[],[]);
                     end
                     observed_neighbours = cell(Kobs,1);

@@ -4,7 +4,7 @@ close all
 
 TopFolder  = fileparts(fileparts(pwd));
 SimFolder  = [TopFolder '\Simulation'];
-DataFolder = [cd '\Allee Data\Set 2\Strong'];
+DataFolder = [cd '\Allee Data\Set 3\Weak'];
 RealFolder = [fileparts(pwd) '\Microscopy Data'];
 %dir(SimFolder)
 addpath(([SimFolder, filesep]))
@@ -158,7 +158,7 @@ for d = 1:length(df)
         
         if save_picture == 1
            
-            figname  = strcat('strong_likelihood_with_prior_',num2str(d));
+            figname  = strcat('weak_likelihood_with_prior_',num2str(d));
 
             saveas(h,strcat('Results\',figname),'png');
         end

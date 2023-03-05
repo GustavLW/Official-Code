@@ -32,9 +32,9 @@ for f = 2:nFiles
         picture = squeeze(ECEAT(:,:,k));
         viscircles(picture,0.5*ones(length(picture),1))
         hold on
-        plot([0 50 50 0 0],[0 0 50 50 0],'k')
+        plot([0 100 100 0 0],[0 0 100 100 0],'k')
         axis equal
-        axis([-5 55 -5 55])
+        axis([-5 105 -5 105])
         drawnow;
         % Capture the plot as an image
         if save == 1

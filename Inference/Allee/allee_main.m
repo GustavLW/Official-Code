@@ -128,6 +128,9 @@ for d = 1:length(df)
         Zmod = sqrt(Zmod - min(min(Zmod)));
         Zmod = exp(3*Zmod);
         surf(L0,L1,Zmod,'EdgeColor','none')
+
+
+
         hold on
         scatter3(log(facit(1)),log(facit(2)),max(max(Zmod))+1,'red','filled')
         scatter3(ML(1),ML(2),max(max(Zmod))+1,'blue','filled')
@@ -141,30 +144,45 @@ for d = 1:length(df)
         
         o0 = o0 + sum(death_event_list(:,2));
         o1 = o1 + sum(death_event_list(:,1)-death_event_list(:,2));
-        death_pdf = @(r) (o0-1)*log((1-exp(-dt*r))) - (o1-1)*dt*r;
+        death_pdf = @(r) (o0-1)*log((1-exp(-dt*r))) - (o1-1)*dt*r - (sum(log(1:o0-1)) - sum(log(o1:(o0+o1-1))));
                 r = linspace(facit(3)/9,3*facit(3),10001);
-        max_death = min(exp(max(death_pdf(r)/sqrt(abs(max(death_pdf(r)))))),10^100);
-        min_death = max(exp(min(death_pdf(r)/sqrt(abs(max(death_pdf(r)))))),-10^100);
-        plot(r,exp(death_pdf(r)/sqrt(abs(max(death_pdf(r))))),'k','LineWidth',1)
+        max_death = min(exp(max(death_pdf(r))),10^100);
+        min_death = max(exp(min(death_pdf(r))),-10^100);
+        plot(r,exp(death_pdf(r)),'k','LineWidth',1)
+        %/sqrt(abs(max(death_pdf(r))))
         hold on
         plot(facit(3)*[1 1],[0.75*min_death 1.25*max_death],'r--','LineWidth',1)
         xlim([min(r) max(r)])
         ylim([0.95*min_death 1.05*max_death])
         xlabel('\omega')
         ylabel('p(\omega|X)')
-        set(gca,'ytick',[])
-        set(gca,'yticklabel',[])
+        %set(gca,'ytick',[])
+        %set(gca,'yticklabel',[])
         grid on
         
         if save_picture == 1
-           
-            figname  = strcat('weak_likelihood_with_prior_',num2str(d));
-
-            saveas(h,strcat('Results\',figname),'png');
+            if priorize == 1
+                prior_string = 'with_prior_';
+            else
+                prior_string = 'without_prior_';
+            end
+            if contains(DataFolder,'Strong')
+                figname  = strcat('strong_likelihood_',prior_string,num2str(d));
+                saveas(h,strcat('Results\',figname),'png');
+                save(strcat('Results\strong_heat_map_',prior_string,num2str(d)),'Z')
+            elseif contains(DataFolder,'Weak')
+                figname  = strcat('weak_likelihood_',prior_string,num2str(d));
+                saveas(h,strcat('Results\',figname),'png');
+                save(strcat('Results\weak_heat_map_',prior_string,num2str(d)),'Z')
+            end
         end
     end
 end
-save('maximum_locations','ML_lambda');
+if contains(DataFolder,'Strong')
+    save(strcat('Results\strong_maximum_locations_',prior_string),'ML_lambda');
+elseif contains(DataFolder,'Weak')
+    save(strcat('Results\weak_maximum_locations_',prior_string),'ML_lambda');
+end
 %%
 
 Zmod = Z/sqrt(abs(max(max(Z))));
@@ -175,11 +193,14 @@ view(0,90)
 
 %%
 
-death_pdf = @(r) (o0-1)*log((1-exp(-dt*r))) - (o1-1)*dt*r;
+o0 = o0 + sum(death_event_list(:,2));
+        o1 = o1 + sum(death_event_list(:,1)-death_event_list(:,2));
+        death_pdf = @(r) (o0-1)*log((1-exp(-dt*r))) - (o1-1)*dt*r - (sum(log(1:o0-1)) - sum(log(o1:(o0+o1-1))));
                 r = linspace(facit(3)/9,3*facit(3),10001);
-        max_death = min(exp(max(death_pdf(r)/sqrt(abs(max(death_pdf(r)))))),10^100);
-        min_death = max(exp(min(death_pdf(r)/sqrt(abs(max(death_pdf(r)))))),-10^100);
-        plot(r,exp(death_pdf(r)/sqrt(abs(max(death_pdf(r))))),'k','LineWidth',1)
+        max_death = min(exp(max(death_pdf(r))),10^100);
+        min_death = max(exp(min(death_pdf(r))),-10^100);
+        plot(r,exp(death_pdf(r)),'k','LineWidth',1)
+        %/sqrt(abs(max(death_pdf(r))))
         hold on
         plot(facit(3)*[1 1],[0.75*min_death 1.25*max_death],'r--','LineWidth',1)
         xlim([min(r) max(r)])

@@ -12,7 +12,7 @@ addpath(([fileparts(pwd) '\Interaction']))
 
 
 are_we_local = 0;
-EXPERIMENT_NR = 1;
+EXPERIMENT_NR = getenv('SLURM_ARRAY_TASK_ID'); 
 
 if are_we_local == 1
     df = dir(DataFolder);

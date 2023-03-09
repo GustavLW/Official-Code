@@ -4,11 +4,13 @@ clear all
 close all
 %rng(921111)
 dset = 1;
-n1m  = [0 3];   % governs initial cell number
-n2m  = [1 4];   % governs initial density
+copies = 5;
+n1m  = [0 4];   % governs initial cell number
+n2m  = [1 1];   % governs initial density
 n3m  = [2 3];   % governs strength of allee effect (1 = no proliferation)
 n4m  = [1 1];   % governs bimodality
 n5m  = [2 2];   % governs interaction parameters
+for c = 1:copies
 for n1 = n1m(1):n1m(2)                              
     for n2 = n2m(1):n2m(2)                          
         for n3 = n3m(1):n3m(2)                      
@@ -40,7 +42,7 @@ for n1 = n1m(1):n1m(2)
                     Omega = scale*[0 0;1 0; 1 1; 0 1]';
                     for i = 1:N
                         theta_tmp = 2*pi*rand;
-                        population{i}     = create_cell(0,[],[],scale/2+(2^((11-n2)/2))*rand*[cos(theta_tmp); sin(theta_tmp)],0,0);
+                        population{i}     = create_cell(0,[],[],scale/2+1.5*(2^((11-n2)/2))*rand*[cos(theta_tmp); sin(theta_tmp)],0,0);
                         observed_cells{i} = create_cell(0,[],[],zeros(2,Kobs),[],[]);
                     end
                     observed_neighbours = cell(Kobs,1);
@@ -231,7 +233,7 @@ for n1 = n1m(1):n1m(2)
         end
     end
 end
-
+end
 function s = span(v)
     s = v(2) - v(1) + 1;
 end

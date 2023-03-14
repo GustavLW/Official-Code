@@ -111,7 +111,7 @@ if are_we_local == 1
 elseif are_we_local == 0
     filename  = strcat('real_',num2str(EXPERIMENT_NR),'_result','.mat');  
 end
-save(strcat('Results\',filename),'repeated_trials')
+save(strcat('Results/',filename),'repeated_trials')
 
 function point = rand_sphere_shell(n,r_radii)
 rang = [pi*rand(1,n-2) 2*pi*rand];

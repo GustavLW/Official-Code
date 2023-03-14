@@ -1,0 +1,14 @@
+function likel = evaluate_likelihood(rho,beta,dt,l0,l1)
+% takes in one lambda0 and one lambda1 and return that pair's likelihood
+
+N = size(rho,1);
+K = size(rho,2);
+likel  = 0;
+for k = 1:K
+    for i = 1:N
+        if sum(rho(i,k:K)) ~= 0 && sum(rho(i,1:k)) ~=0
+            hik = dt*(1 - rho(i,k))*(l0+l1*rho(i,k));
+            likel = likel + beta(ik)*log(hik) - hik - log(factorial(beta(i,k)));
+        end
+    end
+end

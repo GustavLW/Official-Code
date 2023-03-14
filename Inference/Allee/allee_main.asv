@@ -4,7 +4,7 @@ close all
 
 TopFolder  = fileparts(fileparts(pwd));
 SimFolder  = [TopFolder '\Simulation'];
-DataFolder = [cd '\Allee Data\Set 4\Weak\N0 128'];
+DataFolder = [cd '\Allee Data\Set 4\Weak\N0 32'];
 RealFolder = [fileparts(pwd) '\Microscopy Data'];
 %dir(SimFolder)
 addpath(([SimFolder, filesep]))
@@ -109,15 +109,15 @@ for d = length(df):length(df)
     elseif MCMC == 0
         rl0 = round(log(facit(1)));
         rl1 = round(log(facit(2)));
-        plot_range = log(3)/2;
+        plot_range = log(3);
         l0linspace = linspace(rl0-plot_range,rl0+plot_range,resolution);
         l1linspace = linspace(rl1-plot_range,rl1+plot_range,resolution);
         [L0,L1] = meshgrid(l0linspace,l1linspace);
         %Z = L0;
         if priorize == 0
             Z = zeros(resolution);
-            for i = 1:resolution
-                for j = 1:resolution
+            for i = 1:100
+                for j = 1:100
                     Z(i,j) = 0*log(mvnpdf([L0(i,j);L1(i,j)],[log(facit(1)); log(facit(2))],eye(2)));
                 end
             end
@@ -141,15 +141,20 @@ for d = length(df):length(df)
         log_it = 1;
         subplot(3,2,1:4)
         hold off
-        surf(exp(L0),exp(L1),exp(Z),'EdgeColor','none')
+        Zmod = Z/sqrt(abs(max(max(Z))));
+        Zmod = sqrt(Zmod - min(min(Zmod)));
+        Zmod = exp(3*Zmod);
+        surf(L0,L1,Zmod,'EdgeColor','none')
+
+
+
         hold on
-        scatter3((facit(1)),(facit(2)),max(max(exp(Z+1))),'red','filled')
-        view(0,90)
-        xlim([exp(l0linspace(1)) exp(l0linspace(end))])
-        ylim([exp(l1linspace(1)) exp(l1linspace(end))])
-        scatter3(exp(ML(1)),exp(ML(2)),max(max(exp(Z+1))),'blue','filled')
-        xlabel('\lambda_0')
-        ylabel('\lambda_1')
+        scatter3(log(facit(1)),log(facit(2)),max(max(Zmod))+1,'red','filled')
+        scatter3(ML(1),ML(2),max(max(Zmod))+1,'blue','filled')
+        xlabel('log(\lambda_0)')
+        ylabel('log(\lambda_1)')
+        xlim([rl0-plot_range rl0+plot_range])
+        ylim([rl1-plot_range rl1+plot_range])
         view(0,90)
 
         subplot(3,2,5:6)
